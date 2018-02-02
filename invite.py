@@ -81,6 +81,18 @@ def figname(ch):
     if (ch=='Q'):
         return 'ферзём'
     return 'пешкой'
+
+def fignm(ch):
+    if (ch=='R'):
+        return 'Л'
+    if (ch=='N'):
+        return 'К'
+    if (ch=='B'):
+        return 'С'
+    if (ch=='Q'):
+        return 'Ф'
+    return ''
+
     
 passwd=['экскаватор',\
         'тепловоз',\
@@ -196,9 +208,12 @@ if qstyle=='chess':
 #    for mm in moves:
 #        T.insert(END, mm+'\n')
 #    T.insert(END, bb.uci(mv3)[2:]+'\n')
-    q_text='На какое поле нужно пойти '+figname(moves[4][0]).upper()+', чтобы поставить мат чёрным?'
-    Label(root, text=q_text,font=("Helvetica", 32),wraplength=root.winfo_width()/3,anchor=W, justify=LEFT, width=40).place(x=(1*root.winfo_width())/13, y = root.winfo_height()/2-150)
-    pw=bb.uci(mv3)[2:]
+
+#    q_text='На какое поле нужно пойти '+figname(moves[4][0]).upper()+', чтобы поставить мат чёрным?'  #easy mode
+    q_text='Какой ход нужно сделать, чтобы поставить мат чёрным? \n(Кр - король, Ф - ферзь, С - слон, К - конь, Л - ладья, пешка без буквы)'
+    Label(root, text=q_text,font=("Helvetica", 32),wraplength=root.winfo_width()/3,anchor=W, justify=LEFT, width=40).place(x=(1*root.winfo_width())/13, y = root.winfo_height()/3-150)
+#    pw=bb.uci(mv3)[2:]  # easy mode
+    pw=fignm(moves[4][0])+bb.uci(mv3)[2:]
     svg_board = chess.svg.board(bb)
     cairo_board = cairosvg.svg2png(svg_board, write_to=iof)
     iof.seek(0)
