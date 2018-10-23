@@ -1,4 +1,4 @@
-from tkinter import *
+﻿from tkinter import *
 import random,os
 import datetime
 import ctypes
@@ -17,6 +17,7 @@ alt_key = 0x12
 extended_key = 0x0001
 key_up = 0x0002
 
+(fcdate, fccount) = (int(x) for x in open('var_counter.dat').read().split())
 
 def steal_focus():
     keybd_event(alt_key, 0, extended_key | 0, 0)
@@ -49,19 +50,24 @@ def parse_chess_quiz(qf_name):
     return tqa
 
 
-def onclick(event):
-    print("Enter button")
-    if(ev.get()==pw):
-     os.system("shutdown -s -t 1000")
-     root.destroy()
+#def onclick(event):
+#    print("Enter button")
+#    if(ev.get()==pw):
+#     os.system("shutdown -s -t 1500")
+#     root.destroy()
          
 def caps(event):
+    global fccount
+    global fcdate
     if(qstyle!='chess'):
         ev.set(ev.get().upper())  
     print(ev.get())
     print(pw)
     if(ev.get()==pw):
-     os.system("shutdown -s -t 1000")
+     os.system("shutdown -s -t 1500")
+     fccount=random.randint(0,4)
+     open('var_counter.dat','w').write('{} {}'.format(fcdate, fccount))
+     open('continue.dat','w').write('{}\n{}\n{}'.format(0,0,0))
      root.destroy()
      
 def donothing(event):
@@ -94,40 +100,46 @@ def fignm(ch):
     return ''
 
     
-passwd=['экскаватор',\
+passwd=['аттракцион',\
+        'экскаватор',\
         'тепловоз',\
         'патруль',\
+        'велосипед',\
         'щенячий',\
         'калькулятор',\
         'мобильный телефон',\
         'самолёт',\
         'пароход',\
         'вертолёт',\
+        'катапульта',\
         'тепловоз',\
         'автомобиль',\
+        'электровоз',\
         'электрон',\
+        'кристалл',\
+        'зеркало',\
         'тепловизор',\
         'парашют',\
+        'стрелок',\
         'параплан',\
+        'виндсерфинг',\
         'подъезд',\
         'грузовик',\
         'стрелка',\
+        'педаль',\
         'двигатель',\
         'фиксики',\
         'робокар',\
         'шахматы']
 
 
-(fcdate, fccount) = (int(x) for x in open('var_counter.dat').read().split())
 print((fcdate, fccount))
 cdate=datetime.datetime.now().day
 print(cdate)
-if(cdate == fcdate):
-    fccount+=1
-else:
-    fcdate=cdate
-    fccount = 0
-open('var_counter.dat','w').write('{} {}'.format(fcdate, fccount))
+
+if(cdate != fcdate):
+    fccount=0
+
 qstyle='chess'
 if fccount==0:
     qstyle='word'
@@ -138,8 +150,8 @@ elif fccount==2:
     
 random.shuffle(passwd)
 pw=passwd[0].upper()
-int1=random.randint(0,10)
-int2=random.randint(0,10)
+int1=random.randint(-10,10)
+int2=random.randint(0,15)
 sign=random.randint(0,1)
 rr=int1 + (int2 if sign else (-int2))
 print(int1,int2,rr)
@@ -167,10 +179,23 @@ if qstyle=='chess':
         pw=quizs[mn][2]
         qpw=quizs[mn][1]
 
+if(cdate == fcdate):
+    #(cont_fl,pw1,qpw1)=(x for x in open('continue.dat').read().splitlines())
+    cont_lin=open('continue.dat').read().splitlines()
+    cont_fl=cont_lin[0]
+    pw1=cont_lin[1]
+    qpw1='\n'.join(cont_lin[2:])
+    if cont_fl=='1':
+        pw=pw1
+        qpw=qpw1
+else:
+    fcdate=cdate
+    fccount = 0
 
+open('continue.dat','w').write('{}\n{}\n{}'.format(1,pw,qpw))
 
 root = Tk()
-root.bind('<Return>', onclick)
+root.bind('<Return>', caps)
 root.bind("<KeyRelease>", caps)
 root.bind("<Win_R>", donothing)
 root.bind("<Win_L>", donothing)
@@ -196,11 +221,12 @@ if qstyle=='chess':
 #    T = Text(root, height=6, width=30, font=("Tahoma", 16))
 #    T.place(x=(1 * root.winfo_width()) / 14, y=root.winfo_height() / 4)
 #    T.insert(END, qpw)
+    print(moves)
     mv1=bb.parse_san(moves[1])
-    bb.push(mv1)
-    mv2=bb.parse_san(moves[2])
-    bb.push(mv2)
-    mv3=bb.parse_san(moves[4])
+    #bb.push(mv1)
+    #mv2=bb.parse_san(moves[2])
+    #bb.push(mv2)
+    #mv3=bb.parse_san(moves[4])
 #    print(mv3)
 #    print(bb.uci(mv3,True))
 #    print(bb.uci(mv3))
@@ -210,10 +236,12 @@ if qstyle=='chess':
 #    T.insert(END, bb.uci(mv3)[2:]+'\n')
 
 #    q_text='На какое поле нужно пойти '+figname(moves[4][0]).upper()+', чтобы поставить мат чёрным?'  #easy mode
-    q_text='Какой ход нужно сделать, чтобы поставить мат чёрным? \n(Кр - король, Ф - ферзь, С - слон, К - конь, Л - ладья, пешка без буквы)'
+#    q_text='Какой ход нужно сделать, чтобы поставить мат чёрным? \n(Кр - король, Ф - ферзь, С - слон, К - конь, Л - ладья, пешка без буквы)'
+    q_text='Какой ход нужно сделать, чтобы поставить мат в два хода? \n(Кр - король, Ф - ферзь, С - слон, К - конь, Л - ладья, пешка без буквы)'
     Label(root, text=q_text,font=("Helvetica", 32),wraplength=root.winfo_width()/3,anchor=W, justify=LEFT, width=40).place(x=(1*root.winfo_width())/13, y = root.winfo_height()/3-150)
-#    pw=bb.uci(mv3)[2:]  # easy mode
-    pw=fignm(moves[4][0])+bb.uci(mv3)[2:]
+#    pw=bb.uci(mv3)[2:]  # very easy mode
+    #pw=fignm(moves[4][0])+bb.uci(mv3)[2:]  # easy mode
+    pw=fignm(moves[1][0])+bb.uci(mv1)[2:]
     svg_board = chess.svg.board(bb)
     cairo_board = cairosvg.svg2png(svg_board, write_to=iof)
     iof.seek(0)

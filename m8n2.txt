@@ -303,7 +303,7 @@ Almira Skripchenko vs Ralph Zimmer, Bad Mondorf, 1991
 1. Rg8+ Rxg8 2. Nxf7# 
 Michael Adams vs Eric Lobron, Brussels, 1992
 8/7p/5pk1/3n2pq/3N1nR1/1P3P2/P6P/4QK2 w - - 1 0 
-1.Qe8+ Kg7 2.Nf5#
+1. Qe8+ Kg7 2. Nf5#
 Hoang Thanh Tran vs Alina Calota, Duisburg, 1992
 2Q5/pp2rk1p/3p2pq/2bP1r2/5RR1/1P2P3/PB3P1P/7K w - - 1 0
 1. Rxf5+ gxf5 2. Qg8# 
